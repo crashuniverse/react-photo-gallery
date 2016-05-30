@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Photo from 'components/Photo'
 
 export default class Gallery extends Component {
   componentDidMount () {
@@ -7,12 +8,15 @@ export default class Gallery extends Component {
 
   render () {
     const { photos } = this.props
-    console.log(photos)
+    const photoItems = photos.map((photo) => {
+      return <Photo id={photo.id} likes={photo.likes} name={photo.name} url={photo.url} key={photo.id} />
+    })
     return (
-      <div>This component will show Photo Gallery.</div>
+      <div>
+        {photoItems}
+      </div>
     )
   }
-
 }
 
 Gallery.propTypes = {
