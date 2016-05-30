@@ -31,7 +31,8 @@ export const fetchPhotos = (query = SEARCH_QUERY) => {
         if (err) {
           throw err
         }
-        dispatch(setPhotos(res.body))
+        const photos = getPhotosData(res.body)
+        dispatch(setPhotos(photos))
         resolve()
       })
     })
@@ -57,4 +58,19 @@ export default function galleryReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state
+}
+
+// ------------------------------------
+// Helpers
+// ------------------------------------
+function getPhotosData (rawData) {
+  const processedData = rawData.map((photo) => {
+    return {
+      id: photo.id,
+      likes: photo.likes,
+      name: photo.user && photo.user.name,
+      url: photo.urls && photo.urls.regular
+    }
+  })
+  return processedData
 }
