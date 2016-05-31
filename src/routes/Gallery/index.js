@@ -10,10 +10,12 @@ export default (store) => ({
       /*  Webpack - use require callback to define
           dependencies for bundling   */
       const Gallery = require('./containers/GalleryContainer').default
-      const reducer = require('./modules/gallery').default
+      const photosReducer = require('./modules/gallery').photosReducer
+      const paginationReducer = require('./modules/gallery').paginationReducer
 
-      /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: 'photos', reducer })
+      /*  Add the reducer to the store on key 'reducerKey'  */
+      injectReducer(store, { key: 'photos', reducer: photosReducer })
+      injectReducer(store, { key: 'pagination', reducer: paginationReducer })
 
       /*  Return getComponent   */
       cb(null, Gallery)
