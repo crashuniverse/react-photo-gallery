@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import Photo from 'components/Photo'
+import SearchPhotoForm from 'forms/SearchPhotoForm'
 
 export default class Gallery extends Component {
-  componentDidMount () {
-    this.props.fetchPhotos()
-  }
-
   render () {
     const { photos } = this.props
     const photoItems = photos.map((photo) => {
@@ -13,6 +10,7 @@ export default class Gallery extends Component {
     })
     return (
       <div>
+        <SearchPhotoForm onSubmit={this.props.fetchPhotos} />
         {photoItems}
       </div>
     )

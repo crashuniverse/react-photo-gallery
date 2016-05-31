@@ -5,27 +5,25 @@ const request = require('superagent')
 // ------------------------------------
 export const SET_PHOTOS = 'SET_PHOTOS'
 const UNSPLASH_CLIENT_ID = '8f113d7ffc06c7a8f4c8a397dd5b1fd01d884211225ba623ca4a9d4c96097572'
-const SEARCH_QUERY = 'paris'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-function setPhotos (value = SEARCH_QUERY) {
+function setPhotos (value) {
   return {
     type: SET_PHOTOS,
     payload: value
   }
 }
 
-export const fetchPhotos = (query = SEARCH_QUERY) => {
-  console.log('an api request is made')
+export const fetchPhotos = (query) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       request
       .get('https://api.unsplash.com/photos/search/')
       .query({
         'client_id': UNSPLASH_CLIENT_ID,
-        'query': SEARCH_QUERY
+        'query': query.photoSearchQuery
       })
       .end((err, res) => {
         if (err) {
