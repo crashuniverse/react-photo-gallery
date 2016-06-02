@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Photo from 'components/Photo'
 import SearchPhotoForm from 'forms/SearchPhotoForm'
+import classes from './Gallery.scss'
 
 export default class Gallery extends Component {
   navigateToPrevPage () {
@@ -29,7 +30,9 @@ export default class Gallery extends Component {
     return (
       <div>
         <SearchPhotoForm onSubmit={fetchPhotos} />
-        {photoItems}
+        <div className={classes.gallery}>
+          {photoItems}
+        </div>
         {pagination.prev || pagination.next ? paginationButtons : null}
       </div>
     )
