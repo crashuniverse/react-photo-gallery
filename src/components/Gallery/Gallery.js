@@ -22,9 +22,15 @@ export default class Gallery extends Component {
       return <Photo id={photo.id} likes={photo.likes} name={photo.name} url={photo.url} key={photo.id} />
     })
     const paginationButtons = (
-      <div>
-        <button onClick={::this.navigateToPrevPage} disabled={!pagination.prev}>&lt;</button>
-        <button onClick={::this.navigateToNextPage} disabled={!pagination.next}>&gt;</button>
+      <div className={'row ' + classes.pagination}>
+        <div className='col-xs-6 text-right'>
+          <button className='btn btn-primary' onClick={::this.navigateToPrevPage}
+            disabled={!pagination.prev}>&lt;</button>
+        </div>
+        <div className='col-xs-6 text-left'>
+          <button className='btn btn-primary' onClick={::this.navigateToNextPage}
+            disabled={!pagination.next}>&gt;</button>
+        </div>
       </div>
     )
     return (
