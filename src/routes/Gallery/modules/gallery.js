@@ -5,6 +5,7 @@ const request = require('superagent')
 // ------------------------------------
 export const SET_PHOTOS = 'SET_PHOTOS'
 export const SET_PAGINATION = 'SET_PAGINATION'
+export const SET_STATUS = 'SET_STATUS'
 const UNSPLASH_CLIENT_ID = '8f113d7ffc06c7a8f4c8a397dd5b1fd01d884211225ba623ca4a9d4c96097572'
 
 // ------------------------------------
@@ -24,12 +25,20 @@ function setPagination (value) {
   }
 }
 
+function setStatus (value) {
+  return {
+    type: SET_STATUS,
+    payload: value
+  }
+}
+
 export const fetchPhotos = (query, page = 1) => {
   // TODO: redux form sending a second param which is not data is incovenience here
   if (typeof page !== 'string') {
     page = 1
   }
   return (dispatch) => {
+    dispatch(setStatus('progress'))
     return new Promise((resolve) => {
       request
       .get('https://api.unsplash.com/photos/search/')
@@ -44,6 +53,7 @@ export const fetchPhotos = (query, page = 1) => {
         }
         const photos = getPhotosData(res.body)
         const links = getPaginationHeaders(res.headers)
+        dispatch(setStatus('complete'))
         dispatch(setPhotos(photos))
         dispatch(setPagination(links))
         resolve()
@@ -67,6 +77,10 @@ const PAGINATION_ACTION_HANDLER = {
   [SET_PAGINATION]: (state, action) => action.payload
 }
 
+const STATUS_ACTION_HANDLER = {
+  [SET_STATUS]: (state, action) => action.payload
+}
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -79,6 +93,12 @@ export function photosReducer (state = initialPhotosState, action) {
 const initialPaginationState = {}
 export function paginationReducer (state = initialPaginationState, action) {
   const handler = PAGINATION_ACTION_HANDLER[action.type]
+  return handler ? handler(state, action) : state
+}
+
+const initialStatusState = null
+export function statusReducer (state = initialStatusState, action) {
+  const handler = STATUS_ACTION_HANDLER[action.type]
   return handler ? handler(state, action) : state
 }
 

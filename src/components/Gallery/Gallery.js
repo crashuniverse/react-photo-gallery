@@ -17,10 +17,11 @@ export default class Gallery extends Component {
   }
 
   render () {
-    const { photos, fetchPhotos, pagination } = this.props
+    const { photos, fetchPhotos, pagination, status } = this.props
     const photoItems = photos.map((photo) => {
       return <Photo id={photo.id} likes={photo.likes} name={photo.name} url={photo.url} key={photo.id} />
     })
+    const noPhotoMessage = <div>No photos found.</div>
     const paginationButtons = (
       <div className={'row ' + classes.pagination}>
         <div className='col-xs-6 text-right'>
@@ -37,7 +38,7 @@ export default class Gallery extends Component {
       <div>
         <SearchPhotoForm onSubmit={fetchPhotos} />
         <div className={classes.gallery}>
-          {photoItems}
+          {photos.length ? photoItems : (status === 'complete' ? noPhotoMessage : null)}
         </div>
         {pagination.prev || pagination.next ? paginationButtons : null}
       </div>
@@ -49,7 +50,8 @@ Gallery.propTypes = {
   fetchPhotos: React.PropTypes.func,
   photos: React.PropTypes.array,
   photoSearchQuery: React.PropTypes.string,
-  pagination: React.PropTypes.object
+  pagination: React.PropTypes.object,
+  status: React.PropTypes.any
 }
 
 export default Gallery

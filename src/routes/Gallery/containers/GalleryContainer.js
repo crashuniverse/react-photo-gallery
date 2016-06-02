@@ -19,7 +19,8 @@ const mapActionCreators = {
 const mapStateToProps = (state) => ({
   photos: state.photos,
   pagination: state.pagination,
-  photoSearchQuery: state.form.SearchPhoto && state.form.SearchPhoto.photoSearchQuery.value
+  photoSearchQuery: state.form.SearchPhoto && state.form.SearchPhoto.photoSearchQuery.value,
+  status: state.status
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
