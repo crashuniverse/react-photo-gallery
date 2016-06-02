@@ -24,14 +24,19 @@ function setPagination (value) {
   }
 }
 
-export const fetchPhotos = (query) => {
+export const fetchPhotos = (query, page = 1) => {
+  // TODO: redux form sending a second param which is not data is incovenience here
+  if (typeof page !== 'string') {
+    page = 1
+  }
   return (dispatch) => {
     return new Promise((resolve) => {
       request
       .get('https://api.unsplash.com/photos/search/')
       .query({
         'client_id': UNSPLASH_CLIENT_ID,
-        'query': query.photoSearchQuery
+        'query': query.photoSearchQuery,
+        'page': page
       })
       .end((err, res) => {
         if (err) {
@@ -40,7 +45,6 @@ export const fetchPhotos = (query) => {
         const photos = getPhotosData(res.body)
         const links = getPaginationHeaders(res.headers)
         dispatch(setPhotos(photos))
-        console.log(links)
         dispatch(setPagination(links))
         resolve()
       })
@@ -93,10 +97,13 @@ function getPhotosData (rawData) {
   return processedData
 }
 
-function getLinkFromText (linkText) {
+function getPageFromText (linkText) {
   const httpsLinkText = linkText.split(';')[0]
   const httpsLink = httpsLinkText.substring(httpsLinkText.indexOf('<') + 1, httpsLinkText.indexOf('>'))
-  return httpsLink
+  const pagePattern = /&page=\d+/
+  const match = httpsLink.match(pagePattern)[0]
+  const page = match.split('=')[1]
+  return page
 }
 
 function getPaginationHeaders (headers) {
@@ -108,10 +115,10 @@ function getPaginationHeaders (headers) {
   const linkHeadersArray = linkHeaders.split(',')
   linkHeadersArray.forEach((link) => {
     if (link.indexOf('rel="prev"') > -1) {
-      links.prev = getLinkFromText(link)
+      links.prev = getPageFromText(link)
     }
     if (link.indexOf('rel="next"') > -1) {
-      links.next = getLinkFromText(link)
+      links.next = getPageFromText(link)
     }
   })
   return links

@@ -3,15 +3,34 @@ import Photo from 'components/Photo'
 import SearchPhotoForm from 'forms/SearchPhotoForm'
 
 export default class Gallery extends Component {
+  navigateToPrevPage () {
+    const { fetchPhotos, photoSearchQuery, pagination } = this.props
+    fetchPhotos({'photoSearchQuery': photoSearchQuery}, pagination.prev)
+    scrollTo(0, 0)
+  }
+
+  navigateToNextPage () {
+    const { fetchPhotos, photoSearchQuery, pagination } = this.props
+    fetchPhotos({'photoSearchQuery': photoSearchQuery}, pagination.next)
+    scrollTo(0, 0)
+  }
+
   render () {
-    const { photos } = this.props
+    const { photos, fetchPhotos, pagination } = this.props
     const photoItems = photos.map((photo) => {
       return <Photo id={photo.id} likes={photo.likes} name={photo.name} url={photo.url} key={photo.id} />
     })
+    const paginationButtons = (
+      <div>
+        <button onClick={::this.navigateToPrevPage} disabled={!pagination.prev}>&lt;</button>
+        <button onClick={::this.navigateToNextPage} disabled={!pagination.next}>&gt;</button>
+      </div>
+    )
     return (
       <div>
-        <SearchPhotoForm onSubmit={this.props.fetchPhotos} />
+        <SearchPhotoForm onSubmit={fetchPhotos} />
         {photoItems}
+        {pagination.prev || pagination.next ? paginationButtons : null}
       </div>
     )
   }
@@ -19,7 +38,9 @@ export default class Gallery extends Component {
 
 Gallery.propTypes = {
   fetchPhotos: React.PropTypes.func,
-  photos: React.PropTypes.array
+  photos: React.PropTypes.array,
+  photoSearchQuery: React.PropTypes.string,
+  pagination: React.PropTypes.object
 }
 
 export default Gallery

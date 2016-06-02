@@ -24,8 +24,8 @@ export class SearchPhoto extends React.Component {
 
     return (
       <form onSubmit={handleSubmit}>
-        <input type='text' placeholder='Search Photos' autoComplete='off' {...fields.photoSearchQuery} />
-        <button onClick={handleSubmit}>Search</button>
+        <input type='text' placeholder='Search Photos' autoComplete='off' required {...fields.photoSearchQuery} />
+        <button type='submit' onClick={handleSubmit}>Search</button>
       </form>
     )
   }
